@@ -71,6 +71,9 @@ Author URI:
 	global $TheChameleonPageBuilder;					
 	$TheChameleonPageBuilder = new Bootstrap();
 
+	
+
+
 /*
 	global 	$wp_registered_sidebars, $wp_registered_widgets, $wp_registered_widget_controls, $wp_registered_widget_updates, $sidebars_widgets;
 	

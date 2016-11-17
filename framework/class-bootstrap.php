@@ -49,8 +49,153 @@ namespace TheChameleonPageBuilder;
 			
 			//register Sidebars 
 			add_action('widgets_init', array(&$this,'register_page_builder_sidebars'), 2 );	 
+			
+			//filter content
+			add_filter( 'the_content',  array( &$this, 'filter_content' ) ); 
+			
+			add_filter( 'page_template', array( &$this, 'wpa3396_page_template' ) );
+			
+			
+			//register Sidebars 
+			/*add_action('widgets_init', array(&$this,'register_sidebars'), 2 );*/	
+			/*add_action('customize_preview_init', array(&$this,'test') );*/
+			
+			
+		
+			add_action('widgets_init', array(&$this,'register_sidebars') );
+				
+		
+			/*add_action( 'customize_register', array(&$this, 'codeartist_customize_register' ) );*/
 		}
 		
+		
+	/*
+	
+			function codeartist_customize_register($wp_customize) {
+				$wp_customize->add_panel( 'panel_for_widgets', array(
+				    'priority'       => 70,
+				    'title'          => __('Panel for widgets', 'codeartist'),
+				    'capability'     => 'edit_theme_options',
+				));
+				
+				$wp_customize->get_section( '122-1' )->panel = 'panel_for_widgets';
+			}
+			*/
+	
+		
+		
+		
+		function test(){
+		/*
+			echo "ASd";*/
+			print_R($_GET);
+		
+			$current_url = $_GET['url'];
+			$current_id = url_to_postid( $current_url );
+			global $_data ;
+			$_data = array('post_id'=>$current_id);
+			
+			add_action('widgets_init', array(&$this,'register_sidebars'), 2 );	
+			
+		}
+		
+		/**
+		 * 	Register sidebars
+		 *
+		 * @author Goran Petrovic
+		 * @since 1.0
+		 *
+		 **/
+		function register_sidebars(){
+
+		
+			
+			/*if(is_customize_preview()) :*/
+			$args = array(
+				'post_type'  => 'page',
+				/*
+				'meta_key'   => 'age',
+								'orderby'    => 'meta_value_num',
+								'order'      => 'ASC',*/
+				
+				'meta_query' => array(
+					array(
+						'key'     => 'the_chameleon_page_builder_meta',
+						/*
+						'value'   => array( 3, 4 ),
+												'compare' => 'IN',*/
+						
+					),
+				),
+			);
+			$posts = get_posts( $args );
+			
+			/*print_R(	$posts);*/
+			
+			foreach ($posts as $key => $value) {
+				
+ 			   $sidebars = array(
+ 				   $value->ID.'-1' => "Section 1",
+ 			       $value->ID.'-2' => "Section 2",
+ 			   );
+				# code...
+			}
+		
+			   
+				foreach (  $sidebars as $key => $value ) :
+					if ( !empty( $key ) ) :
+						register_sidebar(
+								array(
+									'name'          => 'Page builder bu Chameleon themes ttra asdalfsad fsdfdsfdsfds  ',
+									'id'			=> $key,
+									'description'   => $posts[0]->post_title,
+									'class'			=> 'the_chameleon',
+									'before_widget' => '<section id="%1$s" class="widget hidden %2$s">',
+									'after_widget'  => '</section></section><!-- end widget-->',
+									'before_title'  => '<header class="widget-header"><h4>',
+									'after_title'   => '</h4></header><section class="widget-content">' )
+								);
+					endif;
+				endforeach;
+				
+			/*endif;*/
+			
+		}
+		
+		
+		
+		
+		function wpa3396_page_template( $page_template ){
+		    if ( is_singular('page') ) {
+					$config = Config::getInstance(); 
+		        $page_template = $config->DIR.'parts/Page_Builder/view/page-builder.php';
+		    }
+		    return $page_template;
+		}
+
+		 function filter_content( $content ) { 
+		    if ( is_singular('page')) {
+		      
+				$config = Config::getInstance(); 
+				
+				ob_start();
+					/* PERFORM COMLEX QUERY, ECHO RESULTS, ETC. */
+				include_once($config->DIR.'parts/Page_Builder/view/page-builder.php');
+				
+				$content = ob_get_contents();
+			    ob_end_clean();
+				
+				
+				
+		   
+				
+		
+			}
+
+		    return $content;
+		}
+
+
 
 		//remove_the_chameleon_page_builder
 		function remove_the_chameleon_page_builder() {

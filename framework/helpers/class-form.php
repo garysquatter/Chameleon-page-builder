@@ -177,10 +177,10 @@
 					
 							 /*  jQuery('img#<?php echo $the_id ?>').attr('src', attachment.url);*/
 								
-								jQuery('.open_<?php echo $the_id ?>, #the_chameleon_page_builder_section_header').css('background-image', 'url(' + attachment.url + ')');		
-								jQuery('.open_<?php echo $the_id ?>, #the_chameleon_page_builder_section_header').css('	background-repeat', 'no-repeat');
-								jQuery('.open_<?php echo $the_id ?>, #the_chameleon_page_builder_section_header').css('background-position', 'center center');
-								jQuery('.open_<?php echo $the_id ?>, #the_chameleon_page_builder_section_header').css('background-size', 'cover');
+								jQuery('.open_<?php echo $the_id ?>').css('background-image', 'url(' + attachment.url + ')');		
+								jQuery('.open_<?php echo $the_id ?>').css('	background-repeat', 'no-repeat');
+								jQuery('.open_<?php echo $the_id ?>').css('background-position', 'center center');
+								jQuery('.open_<?php echo $the_id ?>').css('background-size', 'cover');
 								jQuery('input#<?php echo $the_id ?>').attr('value', attachment.url);
 								jQuery('.wp-image-clear_<?php echo $the_id ?>').removeClass('hidden');
 	

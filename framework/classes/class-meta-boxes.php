@@ -187,18 +187,22 @@
 			}
 
 			/* OK, its safe for us to save the data now. */
-			if ( !empty( $_POST['meta'] ) ) :
+			if ( !empty( $_POST['page_builder'] ) ) :
 
+
+				/*print_R( $_POST['page_builder'] );*/
+
+ 				$meta_values = $_POST['page_builder'];
 				
- 				$meta_values = $_POST['meta'];
-
+				//all data
 				update_post_meta( $post_id,	$this->slug.'meta', $meta_values );
 
 				//insert all meta
-				foreach ($_POST['meta'] as $key => $value) :				
+				foreach ($_POST['page_builder'] as $key => $value) :				
 					update_post_meta( $post_id, $key, $value );	
 				endforeach;
-				
+	
+		
 
 			endif;
 
@@ -440,17 +444,7 @@
 		 * @return html
 		 **/
 		static function the_chameleon_page_builder( $post, $id ){  ?>
-			<style type="text/css" media="screen">
-				/*
-				.left{
-									float:left;
-								}	
-								.number_of_sections{
-									margin-top:4px;
-								}
-								.the_chameleon_option_wrap{float:left; margin-right:5px; margin-bottom:5px;}*/
-				
-			</style>
+			
 			<?php
 
 			$name  		= str_replace( "-","_", sanitize_title( $id ) );
@@ -458,19 +452,7 @@
 
 			$config = Config::getInstance(); ?>
 
-		<!--
-			<tr>
-						<td id="newmetaleft" class="left">-->
-		
-					
-				<!--
-					<div class="left" style="width:100%;">
-										
-										<label for="active_page_builder"><input id="active_page_builder" type="checkbox" name="meta[active_page_builder]" value="1" <?php checked(	isset( $post_meta['active_page_builder'] ) ? $post_meta['active_page_builder'] : '' , 1 ); ?>  ><strong> <?php _e('Active Page Builder', 'the-chameleon' ); ?> </strong></label>
-										<br /><br />
-									</div>-->
-				
-	
+
 					<script type="text/javascript" charset="utf-8">
 
 						jQuery(document).ready(function() {	
@@ -495,11 +477,227 @@
 					</script>	
 	
 
+		<?php
+		
+			self::page_builder_item('header', 'Header');
+			self::page_builder_item('top', 'Top');
+			
+			self::page_builder_item('section1', 'Section 1');
+			self::page_builder_item('section2', 'Section 2');
+			self::page_builder_item('section3', 'Section 3');
+			self::page_builder_item('section4', 'Section 4');
+			self::page_builder_item('section5', 'Section 5');
+			self::page_builder_item('section6', 'Section 6');
+			self::page_builder_item('section7', 'Section 7');
+								
+			
+		}
+		
+		/**
+		 * 	page builder item 
+		 *   
+		 *
+		 * @author Goran Petrovic
+		 * @since 1.0
+		 *
+		 * @return html
+		 **/
+		
+		static function page_builder_item( $id, $title = 'Header', $swich = false ){ ?>
+			
+			<?php
+			global  $post;
+			$name  		= str_replace( "-","_", sanitize_title( $id ) );
+			$post_meta 	= self::get_post_meta( $post->ID ); 
+
+			$config = Config::getInstance(); ?>
+			<?php echo '<!-- '.$title.'-->'  ?>
+			<tr id="the_chameleon_page_builder_section_<?php echo $id ?>" class="the_chameleon_page_builder_<?php echo $id ?>_section">
+				<td id="newmetaleft" class="left">
+
+					<div class="section_border">
+
+						<!--<div class="close_button">X</div>-->
+
+						<div class="left the_chameleon_page_builder_title the_chameleon_option_wrap" style="width:100%;">
+						
+							<!-- Title -->
+							<h2 ><span style="float:left;"><?php _e($title, "the-chameleon" ) ;?></strong></h2>
+							
+							<!-- Activation -->
+						    <div class="onoffswitch" style="float:right;">
+						        <input type="checkbox" name="page_builder[switch][<?php echo $id ?>]" class="onoffswitch-checkbox" id="myonoffswitch<?php echo $id ?>" checked>
+						        <label class="onoffswitch-label" for="myonoffswitch<?php echo $id ?>">
+						            <span class="onoffswitch-inner"></span>
+						            <span class="onoffswitch-switch"></span>
+						        </label>
+						    </div>
+							
+						</div>
+						
+						<!-- WRAP -->
+						<div class="left the_chameleon_option_wrap the_chameleon_page_builder_<?php echo $id ?>_wrap">			
+							<p class="components-name"><?php _e("Layout", "the-chameleon" ) ?></p>
+							
+							<!-- INPUT header wrap -->
+							<input type="hidden" name="page_builder[wrap][<?php echo $id ?>]" id="the_chameleon_page_builder_<?php echo $id ?>_wrap" value="" style="width:50px;">
+							
+							<!-- Wrap-->	
+							<div class="icon_wrap">
+							
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="normal" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Box">
+									<img src="<?php echo $config->URL ?>/css/img/box.png" >
+								</div>
+								
+								<div class="section_icon active the_chameleon_page_builder_icon" 	data-value="stretch" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Stretch">
+									<img src="<?php echo $config->URL ?>/css/img/stretch.png">
+								</div>
+								
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="fullwidth" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Fullwidth">
+									<img src="<?php echo $config->URL ?>/css/img/fullwidth.png"  >
+								</div>
+								
+								<div class="section_inputs">
+									<label>Padding</label><br />
+									<input type="text" name="page_builder[padding_top][<?php echo $id ?>]"    style="width:45px;" maxlength="3" placeholder="top">
+									<input type="text" name="page_builder[padding_right][<?php echo $id ?>]"  style="width:45px;" maxlength="3" placeholder="right">
+									<input type="text" name="page_builder[padding_bottom][<?php echo $id ?>]" style="width:45px;" maxlength="3" placeholder="bottom">
+									<input type="text" name="page_builder[padding_left][<?php echo $id ?>]"   style="width:45px;" maxlength="3" placeholder="left">
+									
+								</div>
+								
+							</div>
+						</div>
+						
+						<!-- COLUMNS -->
+						<div class="left the_chameleon_option_wrap the_chameleon_page_builder_<?php echo $id ?>_columns">
+							<p class="components-name"><?php _e("Columns", "the-chameleon" ) ?></p>
+							
+							<!-- INPUT header wrap -->
+							<input type="hidden" name="page_builder[col][<?php echo $id ?>]" id="the_chameleon_page_builder_<?php echo $id ?>_columns" value="" style="width:50px;">
+							
+							
+							<div class="icon_wrap">
+								
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-1" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="1 Columne">
+									<img src="<?php echo $config->URL ?>/css/img/1Column.png" >
+								</div> 
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-2" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes">
+									<img src="<?php echo $config->URL ?>/css/img/2Column.png">
+								</div>
+								<div class="section_icon active the_chameleon_page_builder_icon" 	data-value="col-2-30x70" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes 30%-70%">
+									<img src="<?php echo $config->URL ?>/css/img/2Column30x70.png">
+								</div>
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-2-70x30" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes 70%-30%">
+									<img src="<?php echo $config->URL ?>/css/img/2Column70x30.png">
+								</div>
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-3" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes">
+									<img src="<?php echo $config->URL ?>/css/img/3Column.png">
+								</div>
+
+								<br />
+
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-3-15x25x60"       data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes 15%-25%-60%">
+									<img src="<?php echo $config->URL ?>/css/img/3Column15x25x60.png">
+								</div>
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-3-60x25x15" 	  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes 60%-25%-15%">
+									<img src="<?php echo $config->URL ?>/css/img/3Column60x25x15.png">
+								</div>
+								<div class="section_icon the_chameleon_page_builder_icon"           data-value="col-4" 			      data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="4 Columnes">
+									<img src="<?php echo $config->URL ?>/css/img/4Column.png">
+								</div>
+								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-5" 				  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="5 Columnes">
+									<img src="<?php echo $config->URL ?>/css/img/5Column.png">
+								</div>
+								<div class="section_icon the_chameleon_page_builder_icon"           data-value="col-6" 				  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="6 Columnes">
+									<img src="<?php echo $config->URL ?>/css/img/6Column.png" >
+								</div>
+							</div>
+						</div>
+
+						<div class="left the_chameleon_option_wrap" style="">
+							<p class="components-name"><?php _e("Animations", "the-chameleon" ) ?></p>
+									
+							<?php echo Form::select("page_builder[animate][$id]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animates, array('class'=>'section_input')); ?>
+
+							<br />
+							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_durations, array('class'=>'section_input')); ?>-->
+	
+							<input type="range" name="page_builder[animate_duration][<?php echo $id ?>]" min="0" max="2" step="0.1" title="Duration">
+							<br />
+							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_delays, array('class'=>'section_input')); ?>-->
+							<input type="range" name="page_builder[animate_delay][<?php echo $id ?>]" min="0" max="2" step="0.1" title="Delay">
+						</div>
+
+
+						<div class="left the_chameleon_option_wrap css_option_wrap" style="">
+							
+							<!--<p class="components-name"><?php _e("Design", "the-chameleon" ) ?></p>-->
+
+							<label><?php _e("Background", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[bg_color][$id]", 'sdsadsds'); ?>
+							<br />
+							<?php echo Form::wp_image("page_builder[bg_image][$id]", ''); ?>
+							<br />
+
+							<?php 
+							
+							$image_postion = array(
+								"tile"	    => "Tiled Image",
+								"cover"     =>"Cover",
+								"center"    =>"Centered, (Original Size)",
+								"parallax-original"=>"Parallax (Original Size)",
+								"parallax"		=> "Parallax"
+								
+							);
+							echo Form::select("page_builder[bg_type][$id]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , 	$image_postion, array('class'=>'section_input')); ?>
+
+						
+							<br />
+							<label><?php _e("Color", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[color][$id]", ''); ?>
+							<br />
+							<label><?php _e("Link", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[color_link][$id]", ''); ?>
+							<br />
+							<label><?php _e("Border", "the-chameleon" ) ?></label>
+							<br />
+							<input type="text" style="width:30px; float:left;" maxlength="2">
+							<?php echo Form::color("page_builder[border_color][$id]", ''); ?>
+							
+							
+							
+							
+							<input id="" class="section_input" type="text" name="page_builder[class][<?php echo $id ?>]" value="" placeholder="Custom class" style="width:100%;"><br />
+						
+							<div class="section_color">
+								<input type="hidden" name="" id="the_chameleon_page_builder_header_class">
+								<div class="color_button light active">Light</div>
+								<div class="color_button dark">Dark</div>
+							</div>	
+										
+						</div>
+					</div>
+
+				</td>
+			</tr>
+			
+			
+			
+		<?php	
+			
+		}
+		
+		
+		static function bekap(){ ?>
+			
+
 			<!-- HEADER -->
 			<tr id="the_chameleon_page_builder_section_header" class="the_chameleon_page_builder_header_section">
 				<td id="newmetaleft" class="left">
-
-				
 
 					<div class="section_border">
 
@@ -512,7 +710,7 @@
 							
 							<!-- Activation -->
 						    <div class="onoffswitch">
-						        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+						        <input type="checkbox" name="page_builder[switch][header]" class="onoffswitch-checkbox" id="myonoffswitch" checked>
 						        <label class="onoffswitch-label" for="myonoffswitch">
 						            <span class="onoffswitch-inner"></span>
 						            <span class="onoffswitch-switch"></span>
@@ -523,10 +721,10 @@
 						
 						<!-- WRAP -->
 						<div class="left the_chameleon_option_wrap the_chameleon_page_builder_header_wrap">			
-							<p class="components-name">Layout</p>
+							<p class="components-name"><?php _e("Layout", "the-chameleon" ) ?></p>
 							
 							<!-- INPUT header wrap -->
-							<input type="hidden" name="" id="the_chameleon_page_builder_header_wrap" value="" style="width:50px;">
+							<input type="hidden" name="page_builder[wrap][header]" id="the_chameleon_page_builder_header_wrap" value="" style="width:50px;">
 							
 							<!-- Wrap-->	
 							<div class="icon_wrap">
@@ -545,38 +743,22 @@
 								
 								<div class="section_inputs">
 									<label>Padding</label><br />
-									<input type="text" style="width:35px;" maxlength="3" placeholder="top">px
-									<input type="text" style="width:35px;" maxlength="3" placeholder="right">px
-									<input type="text" style="width:35px;" maxlength="3" placeholder="bottom">px
-									<input type="text" style="width:35px;" maxlength="3" placeholder="left">px
+									<input type="text" name="page_builder[padding_top][header]"    style="width:35px;" maxlength="3" placeholder="top">px
+									<input type="text" name="page_builder[padding_right][header]"  style="width:35px;" maxlength="3" placeholder="right">px
+									<input type="text" name="page_builder[padding_bottom][header]" style="width:35px;" maxlength="3" placeholder="bottom">px
+									<input type="text" name="page_builder[padding_left][header]"   style="width:35px;" maxlength="3" placeholder="left">px
 									
 								</div>
 								
 							</div>
 						</div>
 						
-						
-						
-	  		 		<!--
-	  		 			'col-1' 	  	 => __( '1 Column', 'the-chameleon' ),
-	  		 								'col-2' 	  	 => __( '2 Columns', 'the-chameleon' ),
-	  		 								'col-2-30x70' 	 => __( '2 Columns 30x70%', 'the-chameleon' ),
-	  		 								'col-2-70x30' 	 => __( '2 Columns 70x30%', 'the-chameleon' ),
-	  		 								'col-3'		  	 => __( '3 Columns', 'the-chameleon' ),
-	  		 								'col-3-60x25x15' => __( '3 Columns 60x25x15%', 'the-chameleon' ),
-	  		 								'col-3-15x25x60' => __( '3 Columns 15x25x60%', 'the-chameleon' ),
-	  		 								'col-4'		  	 => __( '4 Columns', 'the-chameleon' ),
-	  		 								'col-5'		  	 => __( '5 Columns', 'the-chameleon' ),
-	  		 								'col-6'		  	 => __( '6 Columns', 'the-chameleon' )
-	  		 								-->
-	  		 		
-
 						<!-- COLUMNS -->
 						<div class="left the_chameleon_option_wrap the_chameleon_page_builder_header_columns">
-							<p class="components-name">Columns</p>
+							<p class="components-name"><?php _e("Columns", "the-chameleon" ) ?></p>
 							
 							<!-- INPUT header wrap -->
-							<input type="hidden" name="" id="the_chameleon_page_builder_header_columns" value="" style="width:50px;">
+							<input type="hidden" name="page_builder[col][header]" id="the_chameleon_page_builder_header_columns" value="" style="width:50px;">
 							
 							
 							<div class="icon_wrap">
@@ -618,30 +800,30 @@
 						</div>
 
 						<div class="left the_chameleon_option_wrap" style="">
-							<p class="components-name">Animations</p>
+							<p class="components-name"><?php _e("Animations", "the-chameleon" ) ?></p>
 									
-							<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animates, array('class'=>'section_input')); ?>
+							<?php echo Form::select("page_builder[animate][header]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animates, array('class'=>'section_input')); ?>
 
 							<br />
 							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_durations, array('class'=>'section_input')); ?>-->
 	
-							<input type="range" min="0" max="2" step="0.1" title="Duration">
+							<input type="range" name="page_builder[animate_duration][header]" min="0" max="2" step="0.1" title="Duration">
 							<br />
 							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_delays, array('class'=>'section_input')); ?>-->
-							<input type="range" min="0" max="2" step="0.1" title="Delay">
+							<input type="range" name="page_builder[animate_delay][header]" min="0" max="2" step="0.1" title="Delay">
 						</div>
 
 
 						<div class="left the_chameleon_option_wrap css_option_wrap" style="">
-							<p class="components-name">Design</p>
+							<p class="components-name"><?php _e("Design", "the-chameleon" ) ?></p>
 							
 							<input id="metasection_1_custom_class" class="section_input" type="text" name="meta[section_1_custom_class]" value="" placeholder="Custom class" style="width:120px"><br />
 
-							<label>Background</label>
+							<label><?php _e("Background", "the-chameleon" ) ?></label>
 							<br />
-							<?php echo Form::color("sdsadsds", 'sdsadsds'); ?>
+							<?php echo Form::color("page_builder[bg_color][header]", 'sdsadsds'); ?>
 							<br />
-							<?php echo Form::wp_image("meta[top_animate]", ''); ?>
+							<?php echo Form::wp_image("page_builder[bg_image][header]", ''); ?>
 							<br />
 
 							<?php 
@@ -654,39 +836,33 @@
 								"parallax"		=> "Parallax"
 								
 							);
-							echo Form::select("meta[top_animatess]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , 	$image_postion, array('class'=>'section_input')); ?>
+							echo Form::select("page_builder[bg_type][header]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , 	$image_postion, array('class'=>'section_input')); ?>
 
-								<br />
-							<label>Color</label>
 							<br />
-							<?php echo Form::color("sdsadfdfddsds", 'sdsadsds'); ?>
+							<label><?php _e("Color", "the-chameleon" ) ?></label>
 							<br />
-							<label>Link</label>
+							<?php echo Form::color("page_builder[color][header]", ''); ?>
 							<br />
-							<?php echo Form::color("sdsadfddfdsds", 'sdsadsds'); ?>
-							
-							
+							<label><?php _e("Link", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[color_link][header]", ''); ?>
+						
 							<!--
 							<div class="section_color">
-															<input type="hidden" name="" id="the_chameleon_page_builder_header_class">
-															<div class="color_button light active">Light</div>
-															<div class="color_button dark">Dark</div>
-														</div>		-->
-							
-									
+								<input type="hidden" name="" id="the_chameleon_page_builder_header_class">
+								<div class="color_button light active">Light</div>
+								<div class="color_button dark">Dark</div>
+							</div>		-->
+										
 						</div>
 					</div>
-				
 
 				</td>
 			</tr>
-
-
-		<?php
-
-		}
-		
-		
+			
+			
+			
+		<?php }
 		/**
 		 * 	checkbox filed
 		 *   
