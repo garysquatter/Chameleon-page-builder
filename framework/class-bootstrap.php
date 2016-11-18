@@ -66,7 +66,24 @@ namespace TheChameleonPageBuilder;
 				
 		
 			/*add_action( 'customize_register', array(&$this, 'codeartist_customize_register' ) );*/
+			
+			
+			add_action( 'customize_controls_enqueue_scripts',  array(&$this, 'custom_customize_enqueue' ) );
+			
+			add_action( 'customize_controls_init',  array(&$this, 'custom_customize_enqueue' ) );
+			add_action( 'admin_enqueue_scripts',  array(&$this, 'custom_customize_enqueue' ) );
+			
+			
 		}
+		
+		
+		/**
+		 * Enqueue script for custom customize control.
+		 */
+		function custom_customize_enqueue() {
+			wp_enqueue_script( 'custom-customize', $this->config->URL . 'js/custom.customize.js', array( 'jquery' ));
+		}
+		
 		
 		
 	/*

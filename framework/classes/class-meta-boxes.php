@@ -202,11 +202,24 @@
 					update_post_meta( $post_id, $key, $value );	
 				endforeach;
 	
-		
-
+				
+				$location = admin_url().'customize.php?url= http://localhost/chameleon/page-bulder-test/';
+			/*	print_R($redirect_url);*/
+				wp_redirect($location);
+				
+			/*	apply_filters( 'redirect_post_location',  $location,  $post_id );*/
+	
 			endif;
 
 
+			/*
+			add_filter('redirect_post_location', function($location){
+						    
+							$location = admin_url().'customize.php?url='.site_url().'?p='.$post_id;
+							
+						    return $location;
+						});*/
+			
 		}
 		
 

@@ -92,57 +92,7 @@ $meta = get_post_meta(get_the_ID(), 'the_chameleon_page_builder_meta', true);
 
 ?>
 
- <style type="text/css" media="screen">
- <?php 
-/*  print_r(  $meta );*/
- 
-  $css_options = array('bg_image'=>'background-image', 'bg_color'=>'background-color', 'bg_type' );
-  
- foreach ($css_options as $css_key => $css_option) {
- 
-	 foreach ($meta[$css_key] as $key => $m) {
-		 
-		 echo 'key'.$css_key. '==='.$key.'-';
-		  echo 'v'.$m.'<br />';
-		/*
-		 echo $key;
-			 print_R($m);*/
-	
-	 	 /*
-	 	 $bg_image 		= !empty( $m['bg_image'] ) 		? $m['bg_image'] : '';
-	 	 		 $bg_color 		= !empty( $m['bg_color'] ) 		? $m['bg_color'] : '';
-	 	 		 $bg_type		= !empty( $m['bg_type']) 		? $m['bg_type']  : '';
-	 	 	 
-	 	 		 $p_t 			= !empty( $m[$key]['padding_top'] ) 	? $m[$key]['padding_top'] 	: '';
-	 	 		 $p_r 			= !empty( $m[$key]['padding_right'] ) 	? $m[$key]['padding_right'] 	: '';
-	 	 		 $p_b 			= !empty( $m[$key]['padding_bottom'] )	? $m[$key]['padding_bottom'] 	: '';
-	 	 		 $p_l 			= !empty( $m[$key]['padding_left'] ) 	? $m[$key]['padding_left'] 	: '';
-	 	 	 
-	 	 		 $color 	 	= !empty( $m[$key]['color'] ) 		? $m[$key]['color'] 		: '';
-	 	 		 $color_link 	= !empty( $m[$key]['color_link'] ) 	? $m[$key]['color_link'] 	: '';
-	 	 	 
-	 	 		 $border 		= !empty( $m[$key]['border'] ) 			? $m[$key]['border'] 		 : '';
-	 	 		 $border_color  = !empty( $m[$key]['border_color'] ) 	? $m[$key]['border_color'] : '';
-	 	 	 
-	 	 		 echo	  $key. ' ' .$bg_color.'<br />' ;*/
-	 	 
-		/* $background = */
-	 
-		/* echo '#page-builder-'.$key.'{background:'.$bg_color.';}';*/
-	
-		
-	
-	 }  
-	 
- } ;
- 
- 
 
- 
- ?>
-
- 
- </style>
 	
 <!-- Start page -->
 <section id="page-<?php the_ID(); ?>" <?php post_class('the_chameleon_page_builder'); ?>>
