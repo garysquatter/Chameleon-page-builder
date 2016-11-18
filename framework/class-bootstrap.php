@@ -146,11 +146,11 @@ namespace TheChameleonPageBuilder;
 					if ( !empty( $key ) ) :
 						register_sidebar(
 								array(
-									'name'          => 'Page builder bu Chameleon themes ttra asdalfsad fsdfdsfdsfds  ',
+									'name'          => $value,
 									'id'			=> $key,
 									'description'   => $posts[0]->post_title,
 									'class'			=> 'the_chameleon',
-									'before_widget' => '<section id="%1$s" class="widget hidden %2$s">',
+									'before_widget' => '<section id="%1$s" class="widget  %2$s">', //hidden
 									'after_widget'  => '</section></section><!-- end widget-->',
 									'before_title'  => '<header class="widget-header"><h4>',
 									'after_title'   => '</h4></header><section class="widget-content">' )

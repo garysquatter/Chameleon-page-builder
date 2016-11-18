@@ -507,11 +507,51 @@
 			
 			<?php
 			global  $post;
+			$config 	= Config::getInstance();
+			
+			//sanitize name
 			$name  		= str_replace( "-","_", sanitize_title( $id ) );
-			$post_meta 	= self::get_post_meta( $post->ID ); 
+			//get values
+			$meta 		= get_post_meta( $post->ID, $config->slug.'meta', true ); 
+			
+			//define values
+			$meta['switch'][$id] 			 = !empty($meta['switch'][$id]) ? $meta['switch'][$id] : 'off';
+			$meta['wrap'][$id] 	 			 = !empty($meta['wrap'][$id])   ? $meta['wrap'][$id]   : 'normal';
+			
+			$meta['padding_top'][$id] 	 	 = !empty($meta['padding_top'][$id])      ? $meta['padding_top'][$id]    : '';
+			$meta['padding_right'][$id] 	 = !empty($meta['padding_right'][$id])    ? $meta['padding_right'][$id]  : '';
+			$meta['padding_bottom'][$id] 	 = !empty($meta['padding_bottom'][$id])   ? $meta['padding_bottom'][$id] : '';
+			$meta['padding_left'][$id] 	 	 = !empty($meta['padding_left'][$id])     ? $meta['padding_left'][$id]   : '';
+			
+			$meta['col'][$id] 	 			 = !empty($meta['col'][$id])     		  ? $meta['col'][$id]   		  : 'col-1';
+			
+			$meta['animate'][$id] 	 		 = !empty($meta['animate'][$id])     	  ? $meta['animate'][$id]   	   : '';
+			$meta['animate_duration'][$id] 	 = !empty($meta['animate_duration'][$id]) ? $meta['animate_duration'][$id] : '0.5';
+			$meta['animate_delay'][$id] 	 = !empty($meta['animate_delay'][$id])    ? $meta['animate_delay'][$id]    : '0';
+			
+			$meta['bg_color'][$id] 	 		 = !empty($meta['bg_color'][$id])    	  ? $meta['bg_color'][$id]    : '';
+			$meta['bg_image'][$id]			 = !empty($meta['bg_image'][$id])         ? $meta['bg_image'][$id]    : '';
+			$meta['bg_type'][$id]			 = !empty($meta['bg_type'][$id])          ? $meta['bg_type'][$id]     : 'parallax';
+		
+		
+			$meta['color'][$id]			 	= !empty($meta['color'][$id])          	  ? $meta['color'][$id]     	: '';
+			$meta['color_link'][$id]		= !empty($meta['color_link'][$id])        ? $meta['color_link'][$id]    : '';
+			$meta['border'][$id]			= !empty($meta['border'][$id])        	  ? $meta['border'][$id]    	: '';
+			$meta['border_color'][$id]		= !empty($meta['border_color'][$id])      ? $meta['border_color'][$id]  : '';
+			$meta['class'][$id]				= !empty($meta['class'][$id])      		  ? $meta['class'][$id]    		: '';
+			
+			$meta['the_chameleon_class'][$id]= !empty($meta['the_chameleon_class'][$id])   ? $meta['the_chameleon_class'][$id]    : '';
 
-			$config = Config::getInstance(); ?>
-			<?php echo '<!-- '.$title.'-->'  ?>
+			
+		
+			/*
+			echo "<pre>";
+									print_R($meta);
+									echo "</pre>";*/
+			
+			
+			?>
+			<?php echo '<!-- START'.$title.'-->'  ?>
 			<tr id="the_chameleon_page_builder_section_<?php echo $id ?>" class="the_chameleon_page_builder_<?php echo $id ?>_section">
 				<td id="newmetaleft" class="left">
 
@@ -526,12 +566,12 @@
 							
 							<!-- Activation -->
 						    <div class="onoffswitch" style="float:right;">
-						        <input type="checkbox" name="page_builder[switch][<?php echo $id ?>]" class="onoffswitch-checkbox" id="myonoffswitch<?php echo $id ?>" checked>
+						        <input type="checkbox" name="page_builder[switch][<?php echo $id ?>]" class="onoffswitch-checkbox" id="myonoffswitch<?php echo $id ?>" <?php checked($meta['switch'][$id], 'on'); ?> >
 						        <label class="onoffswitch-label" for="myonoffswitch<?php echo $id ?>">
 						            <span class="onoffswitch-inner"></span>
 						            <span class="onoffswitch-switch"></span>
 						        </label>
-						    </div>
+						    </div> 
 							
 						</div>
 						
@@ -540,29 +580,29 @@
 							<p class="components-name"><?php _e("Layout", "the-chameleon" ) ?></p>
 							
 							<!-- INPUT header wrap -->
-							<input type="hidden" name="page_builder[wrap][<?php echo $id ?>]" id="the_chameleon_page_builder_<?php echo $id ?>_wrap" value="" style="width:50px;">
+							<input type="hidden" name="page_builder[wrap][<?php echo $id ?>]" id="the_chameleon_page_builder_<?php echo $id ?>_wrap" value="<?php echo $meta['wrap'][$id]?>" style="width:50px;">
 							
 							<!-- Wrap-->	
 							<div class="icon_wrap">
-							
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="normal" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Box">
+								
+								<div class="section_icon <?php echo ($meta['wrap'][$id]=="normal") ? 'active' : "" ; ?> the_chameleon_page_builder_icon" 		data-value="normal" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Box">
 									<img src="<?php echo $config->URL ?>/css/img/box.png" >
 								</div>
 								
-								<div class="section_icon active the_chameleon_page_builder_icon" 	data-value="stretch" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Stretch">
+								<div class="section_icon <?php echo ($meta['wrap'][$id]=="stretch") ? 'active' : "" ; ?>  the_chameleon_page_builder_icon" 		data-value="stretch" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Stretch">
 									<img src="<?php echo $config->URL ?>/css/img/stretch.png">
 								</div>
 								
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="fullwidth" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Fullwidth">
+								<div class="section_icon <?php echo ($meta['wrap'][$id]=="fullwidth") ? 'active' : "" ; ?>  the_chameleon_page_builder_icon" 	 data-value="fullwidth" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_wrap" data-div="the_chameleon_page_builder_<?php echo $id ?>_wrap" title="Fullwidth">
 									<img src="<?php echo $config->URL ?>/css/img/fullwidth.png"  >
 								</div>
 								
 								<div class="section_inputs">
 									<label>Padding</label><br />
-									<input type="text" name="page_builder[padding_top][<?php echo $id ?>]"    style="width:45px;" maxlength="3" placeholder="top">
-									<input type="text" name="page_builder[padding_right][<?php echo $id ?>]"  style="width:45px;" maxlength="3" placeholder="right">
-									<input type="text" name="page_builder[padding_bottom][<?php echo $id ?>]" style="width:45px;" maxlength="3" placeholder="bottom">
-									<input type="text" name="page_builder[padding_left][<?php echo $id ?>]"   style="width:45px;" maxlength="3" placeholder="left">
+									<input type="number" name="page_builder[padding_top][<?php echo $id ?>]"    value="<?php echo $meta['padding_top'][$id] ?>"    style="width:50px;" maxlength="3" placeholder="T"    title="Top">
+									<input type="number" name="page_builder[padding_right][<?php echo $id ?>]"  value="<?php echo $meta['padding_right'][$id] ?>"  style="width:50px;" maxlength="3" placeholder="R"  title="Right">
+									<input type="number" name="page_builder[padding_bottom][<?php echo $id ?>]" value="<?php echo $meta['padding_bottom'][$id] ?>" style="width:50px;" maxlength="3" placeholder="B" title="Bottom">
+									<input type="number" name="page_builder[padding_left][<?php echo $id ?>]"   value="<?php echo $meta['[padding_left]'][$id] ?>" style="width:50px;" maxlength="3" placeholder="L"   title="Left">
 									
 								</div>
 								
@@ -574,42 +614,42 @@
 							<p class="components-name"><?php _e("Columns", "the-chameleon" ) ?></p>
 							
 							<!-- INPUT header wrap -->
-							<input type="hidden" name="page_builder[col][<?php echo $id ?>]" id="the_chameleon_page_builder_<?php echo $id ?>_columns" value="" style="width:50px;">
+							<input type="hidden" name="page_builder[col][<?php echo $id ?>]" id="the_chameleon_page_builder_<?php echo $id ?>_columns" value="<?php echo $meta['col'][$id]?>">
 							
 							
 							<div class="icon_wrap">
 								
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-1" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="1 Columne">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-1") ? 'active' : "" ; ?>" 				 data-value="col-1" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="1 Columne">
 									<img src="<?php echo $config->URL ?>/css/img/1Column.png" >
 								</div> 
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-2" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-2") ? 'active' : "" ; ?>" 				  data-value="col-2" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes">
 									<img src="<?php echo $config->URL ?>/css/img/2Column.png">
 								</div>
-								<div class="section_icon active the_chameleon_page_builder_icon" 	data-value="col-2-30x70" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes 30%-70%">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-2-30x70") ? 'active' : "" ; ?>"  		  data-value="col-2-30x70" 	    data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes 30%-70%">
 									<img src="<?php echo $config->URL ?>/css/img/2Column30x70.png">
 								</div>
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-2-70x30" 	data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes 70%-30%">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-2-70x30") ? 'active' : "" ; ?>" 		  data-value="col-2-70x30" 	    data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="2 Columnes 70%-30%">
 									<img src="<?php echo $config->URL ?>/css/img/2Column70x30.png">
 								</div>
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-3" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-3") ? 'active' : "" ; ?>" 				  data-value="col-3" 			data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes">
 									<img src="<?php echo $config->URL ?>/css/img/3Column.png">
 								</div>
 
 								<br />
 
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-3-15x25x60"       data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes 15%-25%-60%">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-3-15x25x60") ? 'active' : "" ; ?>" 	   data-value="col-3-15x25x60"    data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes 15%-25%-60%">
 									<img src="<?php echo $config->URL ?>/css/img/3Column15x25x60.png">
 								</div>
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-3-60x25x15" 	  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes 60%-25%-15%">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-3-60x25x15") ? 'active' : "" ; ?>" 	   data-value="col-3-60x25x15" 	  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="3 Columnes 60%-25%-15%">
 									<img src="<?php echo $config->URL ?>/css/img/3Column60x25x15.png">
 								</div>
-								<div class="section_icon the_chameleon_page_builder_icon"           data-value="col-4" 			      data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="4 Columnes">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-4") ? 'active' : "" ; ?>"          	   data-value="col-4" 			  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="4 Columnes">
 									<img src="<?php echo $config->URL ?>/css/img/4Column.png">
 								</div>
-								<div class="section_icon the_chameleon_page_builder_icon" 			data-value="col-5" 				  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="5 Columnes">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-5") ? 'active' : "" ; ?>" 				   data-value="col-5" 			  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="5 Columnes">
 									<img src="<?php echo $config->URL ?>/css/img/5Column.png">
 								</div>
-								<div class="section_icon the_chameleon_page_builder_icon"           data-value="col-6" 				  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="6 Columnes">
+								<div class="section_icon the_chameleon_page_builder_icon <?php echo ($meta['col'][$id]=="col-6") ? 'active' : "" ; ?>"           	   data-value="col-6" 			  data-field-id="the_chameleon_page_builder_<?php echo $id ?>_columns" data-div="the_chameleon_page_builder_<?php echo $id ?>_columns" title="6 Columnes">
 									<img src="<?php echo $config->URL ?>/css/img/6Column.png" >
 								</div>
 							</div>
@@ -618,15 +658,15 @@
 						<div class="left the_chameleon_option_wrap" style="">
 							<p class="components-name"><?php _e("Animations", "the-chameleon" ) ?></p>
 									
-							<?php echo Form::select("page_builder[animate][$id]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animates, array('class'=>'section_input')); ?>
+							<?php echo Form::select("page_builder[animate][$id]", $meta['animate'][$id]  , $config->animates, array('class'=>'section_input')); ?>
 
 							<br />
 							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_durations, array('class'=>'section_input')); ?>-->
 	
-							<input type="range" name="page_builder[animate_duration][<?php echo $id ?>]" min="0" max="2" step="0.1" title="Duration">
+							<input type="range" name="page_builder[animate_duration][<?php echo $id ?>]" value="<?php echo $meta['animate_duration'][$id] ?>" min="0" max="2" step="0.1" title="Duration">
 							<br />
 							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_delays, array('class'=>'section_input')); ?>-->
-							<input type="range" name="page_builder[animate_delay][<?php echo $id ?>]" min="0" max="2" step="0.1" title="Delay">
+							<input type="range" name="page_builder[animate_delay][<?php echo $id ?>]" value="<?php echo $meta['animate_delay'][$id] ?>" min="0" max="2" step="0.1" title="Delay">
 						</div>
 
 
@@ -636,47 +676,49 @@
 
 							<label><?php _e("Background", "the-chameleon" ) ?></label>
 							<br />
-							<?php echo Form::color("page_builder[bg_color][$id]", 'sdsadsds'); ?>
+							<?php echo Form::color("page_builder[bg_color][$id]", $meta['bg_color'][$id]); ?>
 							<br />
-							<?php echo Form::wp_image("page_builder[bg_image][$id]", ''); ?>
+							<?php echo Form::wp_image("page_builder[bg_image][$id]", $meta['bg_image'][$id]); ?>
 							<br />
 
 							<?php 
 							
 							$image_postion = array(
-								"tile"	    => "Tiled Image",
-								"cover"     =>"Cover",
-								"center"    =>"Centered, (Original Size)",
-								"parallax-original"=>"Parallax (Original Size)",
-								"parallax"		=> "Parallax"
+								"tile"	    		=> "Tiled Image",
+								"cover"    	 		=> "Cover",
+								"center"   	 		=> "Centered, (Original Size)",
+								"parallax-original"	=> "Parallax (Original Size)",
+								"parallax"			=> "Parallax"
 								
 							);
-							echo Form::select("page_builder[bg_type][$id]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , 	$image_postion, array('class'=>'section_input')); ?>
+						
+							echo Form::select("page_builder[bg_type][$id]", $meta['bg_type'][$id], $image_postion, array('class'=>'section_input')); ?>
 
 						
 							<br />
 							<label><?php _e("Color", "the-chameleon" ) ?></label>
 							<br />
-							<?php echo Form::color("page_builder[color][$id]", ''); ?>
+							<?php echo Form::color("page_builder[color][$id]", $meta['color'][$id]); ?>
 							<br />
 							<label><?php _e("Link", "the-chameleon" ) ?></label>
 							<br />
-							<?php echo Form::color("page_builder[color_link][$id]", ''); ?>
+							<?php echo Form::color("page_builder[color_link][$id]", $meta['color_link'][$id]); ?>
 							<br />
 							<label><?php _e("Border", "the-chameleon" ) ?></label>
 							<br />
-							<input type="text" style="width:30px; float:left;" maxlength="2">
-							<?php echo Form::color("page_builder[border_color][$id]", ''); ?>
+							<input type="number" name="page_builder[border][<?php echo $id ?>]" value="<?php echo $meta['border'][$id] ?>" style="width:45px; float:left;" maxlength="2">
+							<?php echo Form::color("page_builder[border_color][$id]", $meta['border_color'][$id]); ?>
 							
-							
-							
-							
-							<input id="" class="section_input" type="text" name="page_builder[class][<?php echo $id ?>]" value="" placeholder="Custom class" style="width:100%;"><br />
+
+							<input id="" class="section_input" type="text" name="page_builder[class][<?php echo $id ?>]" value="<?php echo $meta['class'][$id] ?>" placeholder="Custom class" style="width:100%;"><br />
 						
 							<div class="section_color">
-								<input type="hidden" name="" id="the_chameleon_page_builder_header_class">
-								<div class="color_button light active">Light</div>
-								<div class="color_button dark">Dark</div>
+								
+
+								<?php 
+	
+								echo Form::select("page_builder[the_chameleon_class][$id]", $meta['the_chameleon_class'][$id], $config->the_chameleon_page_builder_class, array('class'=>'section_input')); ?>
+								
 							</div>	
 										
 						</div>
@@ -684,7 +726,7 @@
 
 				</td>
 			</tr>
-			
+			<?php echo '<!-- END '.$title.'-->'  ?>
 			
 			
 		<?php	

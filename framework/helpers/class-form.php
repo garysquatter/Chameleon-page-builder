@@ -111,7 +111,16 @@
 			<input type="hidden" name="<?php echo $name ?>" id="<?php echo $the_id ?>" value="<?php echo $value ?>">
 
 			<!--<a href="javascript:;" class="open_<?php echo $the_id ?>">Open Media Uploader</a>-->
+			
+			<?php /*print $value*/ ?>
 
+
+			<style type="text/css" media="screen">
+				
+				.open_<?php echo $the_id ?>{
+				<?php echo !empty($value) ? 'background-position: center center; background-size: cover; background-repeat :no-repeat; background-image: url('.$value.');' : ""?>
+				}
+			</style>
 			<span class="wp-picker-input-wrap">
 				
 				<a tabindex="0" class="wp-color-result open_<?php echo $the_id ?>" title="Select Image" data-current="Select Image" style=""></a>
@@ -223,7 +232,7 @@
 				});
 			</script>
 				
-				<input id="color_<?php echo	$the_id ?>" type="hidden" name="<?php echo $name?>" class="">
+				<input id="color_<?php echo	$the_id ?>" value="<?php echo $value ?>" type="hidden" name="<?php echo $name?>" class="">
 			<?php	
 
 			  if( is_admin() ) { 

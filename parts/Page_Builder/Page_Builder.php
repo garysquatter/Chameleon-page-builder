@@ -47,7 +47,7 @@ namespace TheChameleonPageBuilder{
 																'choices' => array(), // $this->config->sidebars,
 																'attr'	  => array('class'=>'', 'style'=>'')
 																),
-																array( 'type' => 'none', 'name'	=> 'number_of_sections', 'default'=>'5'),
+																array( 'type' => 'none', 'name'	=> 'page_builder[switch][header]', 	 'default'=>'off'),
 																array( 'type' => 'none', 'name'	=> 'active_page_builder', 'default'=>''),
 														
 																array( 'type' => 'none', 'name'	=> 'header_wrap'),

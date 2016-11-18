@@ -42,6 +42,8 @@ Author URI:
 	$config->basename      = plugin_basename( dirname( __FILE__ ) );
 	$config->FILE  		   = __FILE__;	
 
+	$config->the_chameleon_page_builder_class = array('page_builder_light'=>'Light', 'page_builder_dark'=>'Dark');
+
 	//include helpers
 	foreach (glob( 	$config->DIR .'/framework/helpers/*', GLOB_NOSORT ) as $dir_path) :
 		include_once( $dir_path );
