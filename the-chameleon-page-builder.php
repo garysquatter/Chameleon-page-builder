@@ -8,7 +8,7 @@ Plugin Name: The Chameleon Page Builder
 Plugin URI: 
 Description:
 Author: Goran Petrovic
-Version: 1.1
+Version: 1.2
 Author URI: 
 */
 
