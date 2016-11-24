@@ -8,7 +8,7 @@ Plugin Name: The Chameleon Page Builder
 Plugin URI: 
 Description:
 Author: Goran Petrovic
-Version: 1.0
+Version: 1.1
 Author URI: 
 */
 
@@ -74,7 +74,14 @@ Author URI:
 	$TheChameleonPageBuilder = new Bootstrap();
 
 	
-
+	require 'scripts/plugin-update-checker/plugin-update-checker.php';
+	$className = \PucFactory::getLatestClassVersion('PucGitHubChecker');
+	$myUpdateChecker = new $className(
+	    'https://github.com/goran321/the-chameleon-page-builder/',
+	    __FILE__,
+	    'master'
+	);
+	$myUpdateChecker->setAccessToken('5a568aa699a8aec9bd380be2af6df85be8273c7c');
 
 /*
 	global 	$wp_registered_sidebars, $wp_registered_widgets, $wp_registered_widget_controls, $wp_registered_widget_updates, $sidebars_widgets;

@@ -22,9 +22,7 @@
 		
 		function __construct( $parts ){
 			
-
-
-			$config = Config::getInstance();
+			$config 	= Config::getInstance();
 			$this->slug = $config->slug;
 			
 			$this->parts = $parts;					
@@ -41,10 +39,13 @@
 			//get post meta values
 			add_action('init', array(&$this,'get_post_meta_values') );
 			add_action('wp', array(&$this,'get_post_meta_values') );
-			
-			
-		}
+				
+					
 		
+					
+		}
+	
+	
 		
 		/**
 		 * 	Get meta values
@@ -56,7 +57,7 @@
 		 **/
 		function get_post_meta_values(){
 
-			global $TheChameleonMeta;
+			global $TheChameleonPageBuilderMeta;
 			
 			if ( is_singular() or is_single() or is_page() ) :										
 				$get_post_meta = get_post_meta( get_the_ID(), $this->slug.'meta', TRUE);						
@@ -66,7 +67,7 @@
 									foreach ( $value['fields'] as $field ) :									
 										$name 	 				   = $field['name'];										
 										$default 				   = !empty( $field['default'] ) ? $field['default'] : '';										
-										$TheChameleonMeta[ $name ] = isset( $get_post_meta[ $name ] ) ? $get_post_meta[ $name ] : $default;
+										$TheChameleonPageBuilderMeta[ $name ] = isset( $get_post_meta[ $name ] ) ? $get_post_meta[ $name ] : $default;
 										$this->Meta[ $name ] 	   = !empty( $get_post_meta[ $name ] ) ? $get_post_meta[ $name ] : $default;
 									endforeach;
 							endforeach;
@@ -549,6 +550,13 @@
 		
 			$meta['color'][$id]			 	= !empty($meta['color'][$id])          	  ? $meta['color'][$id]     	: '';
 			$meta['color_link'][$id]		= !empty($meta['color_link'][$id])        ? $meta['color_link'][$id]    : '';
+			$meta['color_link_hover'][$id]	= !empty($meta['color_link_hover'][$id])        ? $meta['color_link_hover'][$id]    : '';
+		
+
+			$meta['color_headings'][$id]	  = !empty($meta['color_headings'][$id])      ? $meta['color_headings'][$id]      : '';
+			$meta['color_headings_link'][$id] = !empty($meta['color_headings_link'][$id]) ? $meta['color_headings_link'][$id] : '';
+			$meta['color_headings_link_hover'][$id] = !empty($meta['color_headings_link_hover'][$id]) ? $meta['color_headings_link_hover'][$id] : '';
+		
 			$meta['border'][$id]			= !empty($meta['border'][$id])        	  ? $meta['border'][$id]    	: '';
 			$meta['border_color'][$id]		= !empty($meta['border_color'][$id])      ? $meta['border_color'][$id]  : '';
 			$meta['class'][$id]				= !empty($meta['class'][$id])      		  ? $meta['class'][$id]    		: '';
@@ -672,14 +680,11 @@
 							<p class="components-name"><?php _e("Animations", "the-chameleon" ) ?></p>
 									
 							<?php echo Form::select("page_builder[animate][$id]", $meta['animate'][$id]  , $config->animates, array('class'=>'section_input')); ?>
-
 							<br />
-							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_durations, array('class'=>'section_input')); ?>-->
-	
-							<input type="range" name="page_builder[animate_duration][<?php echo $id ?>]" value="<?php echo $meta['animate_duration'][$id] ?>" min="0" max="2" step="0.1" title="Duration">
+							<?php echo Form::select("page_builder[animate_duration][$id]", $meta['animate_duration'][$id] , $config->animate_durations, array('class'=>'section_input', 'title'=>"Duration")); ?>
 							<br />
-							<!--<?php echo Form::select("meta[top_animate]", isset( $post_meta['top_animate'] ) ? $post_meta['top_animate'] : '' , $config->animate_delays, array('class'=>'section_input')); ?>-->
-							<input type="range" name="page_builder[animate_delay][<?php echo $id ?>]" value="<?php echo $meta['animate_delay'][$id] ?>" min="0" max="2" step="0.1" title="Delay">
+							<?php echo Form::select("page_builder[animate_delay][$id]", $meta['animate_delay'][$id] , $config->animate_delays, array('class'=>'section_input', 'title'=>"Delay")); ?>
+						
 						</div>
 
 
@@ -709,13 +714,37 @@
 
 						
 							<br />
-							<label><?php _e("Color", "the-chameleon" ) ?></label>
+							<label><?php _e("Text", "the-chameleon" ) ?></label>
 							<br />
 							<?php echo Form::color("page_builder[color][$id]", $meta['color'][$id]); ?>
 							<br />
 							<label><?php _e("Link", "the-chameleon" ) ?></label>
 							<br />
 							<?php echo Form::color("page_builder[color_link][$id]", $meta['color_link'][$id]); ?>
+							
+							<br />
+							<label><?php _e("Link:Hover", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[color_link_hover][$id]", $meta['color_link_hover'][$id]); ?>
+							
+							
+							<br />
+							<label><?php _e("Headings", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[color_headings][$id]", $meta['color_headings'][$id]); ?>
+							
+							<br />
+							<label><?php _e("Headings Link", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[color_headings_link][$id]", $meta['color_headings_link'][$id]); ?>
+							
+							<br />
+							<label><?php _e("Headings Link:hover", "the-chameleon" ) ?></label>
+							<br />
+							<?php echo Form::color("page_builder[color_headings_link_hover][$id]", $meta['color_headings_link_hover'][$id]); ?>
+							
+							
+							
 							<br />
 							<label><?php _e("Border", "the-chameleon" ) ?></label>
 							<br />

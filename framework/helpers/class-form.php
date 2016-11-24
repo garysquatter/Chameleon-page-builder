@@ -125,7 +125,7 @@
 				
 				<a tabindex="0" class="wp-color-result open_<?php echo $the_id ?>" title="Select Image" data-current="Select Image" style=""></a>
 	
-				<input class="button button-small wp-image-clear wp-image-clear_<?php echo $the_id ?> hidden" value="Clear" type="button" data-id="<?php echo $the_id ?>" style="width:80px;">
+				<input class="button button-small wp-image-clear wp-image-clear_<?php echo $the_id ?> <?php echo(empty($value)) ? ' hidden' : "" ?>" value="Clear" type="button" data-id="<?php echo $the_id ?>" style="width:80px;">
 			</span>
 
 		
@@ -187,7 +187,7 @@
 							 /*  jQuery('img#<?php echo $the_id ?>').attr('src', attachment.url);*/
 								
 								jQuery('.open_<?php echo $the_id ?>').css('background-image', 'url(' + attachment.url + ')');		
-								jQuery('.open_<?php echo $the_id ?>').css('	background-repeat', 'no-repeat');
+								jQuery('.open_<?php echo $the_id ?>').css('background-repeat', 'no-repeat');
 								jQuery('.open_<?php echo $the_id ?>').css('background-position', 'center center');
 								jQuery('.open_<?php echo $the_id ?>').css('background-size', 'cover');
 								jQuery('input#<?php echo $the_id ?>').attr('value', attachment.url);

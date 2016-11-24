@@ -3,11 +3,15 @@
 get_header();
 
 //http://themehybrid.com/board/topics/customizer-current-preview-url
-global $TheChameleonPageBuilderMeta;  
+global $TheChameleonPageBuilderMeta, $TheChameleonMeta; 
 
 $main_wrap  = 'fullwidth'; 
 
 $meta = get_post_meta(get_the_ID(), 'the_chameleon_page_builder_meta', true);
+
+
+
+
 
 /*print_R($meta );*/
 /*
@@ -117,15 +121,64 @@ $meta = get_post_meta(get_the_ID(), 'the_chameleon_page_builder_meta', true);
  	 
  	 		 $color 	 	= !empty( $meta['color']['section'.$i] ) 			? $meta['color']['section'.$i] 		: '';
  	 		 $color_link 	= !empty( $meta['color_link']['section'.$i] ) 		? $meta['color_link']['section'.$i] 	: '';
- 	 
+ 	 		 $color_link_hover 	= !empty( $meta['color_link_hover']['section'.$i] ) ? $meta['color_link_hover']['section'.$i] 	: '';
+			 
+ 	 		 $color_headings	  = !empty( $meta['color_headings']['section'.$i] ) 		? $meta['color_headings']['section'.$i] 		: '';
+ 	 		 $color_headings_link = !empty( $meta['color_headings_link']['section'.$i] ) 	? $meta['color_headings_link']['section'.$i] 	: '';
+	 	
+			 $color_headings_link_hover = !empty( $meta['color_headings_link_hover']['section'.$i] ) 	? $meta['color_headings_link_hover']['section'.$i] 	: '';
+	 
  	 		 $border 		= !empty( $meta['border']['section'.$i] ) 			? $meta['border']['section'.$i] 		: '';
  	 		 $border_color  = !empty( $meta['border_color']['section'.$i] ) 	? $meta['border_color']['section'.$i] : '';
+			  
+			  
 			  
 			 echo  '<style type="text/css" media="screen">';
 			 
 				 echo '#page-builder-section'.$i.'{';
 				 	echo !empty($bg_color) ? 'background-color:'.$bg_color.';': "";
 					echo !empty($bg_image) ? 'background-image: url('.$bg_image.');': "";
+					
+					/*
+					"tile"	    		=> "Tiled Image",
+										"cover"    	 		=> "Cover",
+										"center"   	 		=> "Centered, (Original Size)",
+										"parallax-original"	=> "Parallax (Original Size)",
+										"parallax"			=> "Parallax"*/
+					
+					if( $bg_type =="tile" ) :
+						echo "background-repeat: repeat;";
+					    echo "background-position: top left;"; 
+					elseif( $bg_type =="cover" ) :
+	
+  					 	echo "background-repeat: no-repeat;"; 
+  					  /*echo "background-attachment: fixed;"; */
+  					 	echo "background-position: center center;"; 
+					 	echo "-webkit-background-size: cover;"; 
+					 	echo "-moz-background-size: cover;"; 
+					  	echo "-o-background-size: cover;"; 
+					  	echo "background-size: cover;"; 
+						
+					elseif( $bg_type =="center" ) :
+  					 	echo "background-repeat: no-repeat;"; 
+  					 	echo "background-position: center center;"; 
+						
+					elseif( $bg_type =="parallax-original" ) :
+						
+					  	echo "background-repeat: no-repeat;"; 
+					  	echo "background-attachment: fixed;"; 
+					  	echo "background-position: center center;";	
+							
+					elseif( $bg_type =="parallax" ) :	
+					  	echo "background-repeat: no-repeat;"; 
+					  	echo "background-attachment: fixed;"; 
+					  	echo "background-position: center center;"; 
+					  	echo "-webkit-background-size: cover;"; 
+					  	echo "-moz-background-size: cover;"; 
+					  	echo "-o-background-size: cover;"; 
+					  	echo "background-size: cover;"; 
+					endif;
+					
 					
 					echo !empty($p_t) ? 'padding-top:'.$p_t.'px;': "";
 					echo !empty($p_r) ? 'padding-right:'.$p_r.'px;': "";
@@ -152,6 +205,34 @@ $meta = get_post_meta(get_the_ID(), 'the_chameleon_page_builder_meta', true);
 				  	echo !empty($color_link) ? 'color:'.$color_link.';': "";
 					 
 				  echo '}';
+				  
+				  echo '#page-builder-section'.$i.' a:hover{';
+					  
+				  	echo !empty($color_link_hover) ? 'color:'.$color_link_hover.';': "";
+					 
+				  echo '}';
+				  
+				  
+				  echo '#page-builder-section'.$i.' h1, #page-builder-section'.$i.' h2, #page-builder-section'.$i.' h3, #page-builder-section'.$i.' h4, #page-builder-section'.$i.' h5, #page-builder-section'.$i.' h6{';
+					  
+				  	echo !empty($color_headings) ? 'color:'.$color_headings.';': "";
+					 
+				  echo '}';
+				  
+				  
+				  echo '#page-builder-section'.$i.' a h1, #page-builder-section'.$i.' a h2, #page-builder-section'.$i.' a h3, #page-builder-section'.$i.' a h4, #page-builder-section'.$i.' a h5, #page-builder-section'.$i.' a h6{';
+					  
+				  	echo !empty($color_headings_link) ? 'color:'.$color_headings_link.';': "";
+					 
+				  echo '}';
+				  
+				  echo '#page-builder-section'.$i.' a:hover h1, #page-builder-section'.$i.' a:hover h2, #page-builder-section'.$i.' a:hover h3, #page-builder-section'.$i.' a:hover h4, #page-builder-section'.$i.' a:hover h5, #page-builder-section'.$i.' a:hover h6{';
+					  
+				  	echo !empty($color_headings_link_hover) ? 'color:'.$color_headings_link_hover.';': "";
+					 
+				  echo '}';
+				  
+	
 			 echo '</style>';
 			 ?> 	
 			 		

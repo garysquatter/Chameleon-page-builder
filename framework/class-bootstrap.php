@@ -73,8 +73,189 @@ namespace TheChameleonPageBuilder;
 			add_action( 'customize_controls_init',  array(&$this, 'custom_customize_enqueue' ) );
 			add_action( 'admin_enqueue_scripts',  array(&$this, 'custom_customize_enqueue' ) );
 			
-			
+	
+		
+			//edit_post transfer_page_builder_data
+			add_action( 'admin_init', array( &$this, 'transfer_page_builder_data' ));		
+				
+				
 		}
+	
+		function transfer_page_builder_data(){
+			
+			if( strstr($_SERVER['REQUEST_URI'], 'wp-admin/post-new.php') || strstr($_SERVER['REQUEST_URI'], 'wp-admin/post.php') ) :
+			    //I'm editing a post, page or custom post type
+				
+				
+				if(isset($_GET['post'])) :
+					
+					//get post 
+					$post_id = $_GET['post'];
+					
+					//get chameleon themes meta
+					$the_chameleon_data = get_post_meta($post_id, 'the_chameleon_meta', true);
+
+				/*	print_R($tMeta);*/
+					
+					$tranfer_check = get_post_meta($post_id, 'the_chameleon_page_builder_transfer_data', true); 
+						
+					if ( !empty( $the_chameleon_data ) and $tranfer_check!="yes") :
+						
+					/*
+						foreach ( $tMeta as $key1 => $value ) :							
+												if ( is_array( $value ) ) :	
+													$the_chameleon_data[$value['key']] =  $value['value'];
+												endif;
+											endforeach;
+										
+										*/
+					
+						/*print_R($the_chameleon_data);*/
+					
+						$new_data = array(
+		
+						    'switch' => array(
+							
+						            'header' 	=> !empty( $the_chameleon_data['header_sidebar'] ) 	  ? 'on' : 'off',
+						            'top' 		=> !empty( $the_chameleon_data['top_sidebar'] ) 	  ? 'on' : 'off', 
+						            'section1' 	=> !empty( $the_chameleon_data['section_1_sidebar'] ) ? 'on' : 'off', 
+						            'section2' 	=> !empty( $the_chameleon_data['section_2_sidebar'] ) ? 'on' : 'off',  
+						            'section3' 	=> !empty( $the_chameleon_data['section_3_sidebar'] ) ? 'on' : 'off',  
+						            'section4' 	=> !empty( $the_chameleon_data['section_4_sidebar'] ) ? 'on' : 'off', 
+						            'section5' 	=> !empty( $the_chameleon_data['section_5_sidebar'] ) ? 'on' : 'off', 
+						            'section6' 	=> !empty( $the_chameleon_data['section_6_sidebar'] ) ? 'on' : 'off', 
+						            'section7' 	=> !empty( $the_chameleon_data['section_7_sidebar'] ) ? 'on' : 'off', 
+
+						        ),
+							
+						    'sidebars' => array(
+						            'header' 	=> $the_chameleon_data['header_sidebar'],
+						            'top' 		=> $the_chameleon_data['top_sidebar'],
+						            'section1' 	=> $the_chameleon_data['section_1_sidebar'],
+						            'section2' 	=> $the_chameleon_data['section_2_sidebar'], 
+						            'section3' 	=> $the_chameleon_data['section_3_sidebar'], 
+						            'section4' 	=> $the_chameleon_data['section_4_sidebar'], 
+						            'section5' 	=> $the_chameleon_data['section_5_sidebar'],
+						            'section6' 	=> $the_chameleon_data['section_6_sidebar'], 
+						            'section7' 	=> $the_chameleon_data['section_7_sidebar'], 
+						        ),
+								
+						    'wrap' => array(
+							
+						            'header' 	=> $the_chameleon_data['header_wrap'],
+						            'top' 		=> $the_chameleon_data['top_wrap'],
+						            'section1' 	=> $the_chameleon_data['section_1_wrap'],
+						            'section2' 	=> $the_chameleon_data['section_2_wrap'], 
+						            'section3' 	=> $the_chameleon_data['section_3_wrap'], 
+						            'section4' 	=> $the_chameleon_data['section_4_wrap'], 
+						            'section5' 	=> $the_chameleon_data['section_5_wrap'],
+						            'section6' 	=> $the_chameleon_data['section_6_wrap'], 
+						            'section7' 	=> $the_chameleon_data['section_7_wrap'], 
+						        ),
+
+						    'col' => array(
+						            'header' 	=> $the_chameleon_data['header_col'],
+						            'top' 		=> $the_chameleon_data['top_col'],
+						            'section1' 	=> $the_chameleon_data['section_1_col'],
+						            'section2' 	=> $the_chameleon_data['section_2_col'], 
+						            'section3' 	=> $the_chameleon_data['section_3_col'], 
+						            'section4' 	=> $the_chameleon_data['section_4_col'], 
+						            'section5' 	=> $the_chameleon_data['section_5_col'],
+						            'section6' 	=> $the_chameleon_data['section_6_col'], 
+						            'section7' 	=> $the_chameleon_data['section_7_col'], 
+						        ),
+
+						    'animate' => array(
+						            'header' 	=> $the_chameleon_data['header_animate'],
+						            'top' 		=> $the_chameleon_data['top_animate'],
+						            'section1' 	=> $the_chameleon_data['section_1_animate'],
+						            'section2' 	=> $the_chameleon_data['section_2_animate'], 
+						            'section3' 	=> $the_chameleon_data['section_3_animate'], 
+						            'section4' 	=> $the_chameleon_data['section_4_animate'], 
+						            'section5' 	=> $the_chameleon_data['section_5_animate'],
+						            'section6' 	=> $the_chameleon_data['section_6_animate'], 
+						            'section7' 	=> $the_chameleon_data['section_7_animate'], 
+						        ),
+
+						    'animate_duration' => array(
+					           	 	'header' 	=> $the_chameleon_data['header_duration'],
+						            'top' 		=> $the_chameleon_data['top_duration'],
+						            'section1' 	=> $the_chameleon_data['section_1_duration'],
+						            'section2' 	=> $the_chameleon_data['section_2_duration'], 
+						            'section3' 	=> $the_chameleon_data['section_3_duration'], 
+						            'section4' 	=> $the_chameleon_data['section_4_duration'], 
+						            'section5' 	=> $the_chameleon_data['section_5_duration'],
+						            'section6' 	=> $the_chameleon_data['section_6_duration'], 
+						            'section7' 	=> $the_chameleon_data['section_7_duration'], 
+						        ),
+
+						    'animate_delay' => array(
+					           	 	'header' 	=> $the_chameleon_data['header_delay'],
+						            'top' 		=> $the_chameleon_data['top_delay'],
+						            'section1' 	=> $the_chameleon_data['section_1_delay'],
+						            'section2' 	=> $the_chameleon_data['section_2_delay'], 
+						            'section3' 	=> $the_chameleon_data['section_3_delay'], 
+						            'section4' 	=> $the_chameleon_data['section_4_delay'], 
+						            'section5' 	=> $the_chameleon_data['section_5_delay'],
+						            'section6' 	=> $the_chameleon_data['section_6_delay'], 
+						            'section7' 	=> $the_chameleon_data['section_7_delay'], 
+						        ),
+
+						    'class' => array(
+					           	 	'header' 	=> isset( $the_chameleon_data['header_custom_class'] ) ? $the_chameleon_data['header_custom_class'] : "",
+						            'top' 		=> isset( $the_chameleon_data['top_custom_class'] )    ? $the_chameleon_data['top_custom_class']    : "",
+						            'section1' 	=> $the_chameleon_data['section_1_custom_class'],
+						            'section2' 	=> $the_chameleon_data['section_2_custom_class'], 
+						            'section3' 	=> $the_chameleon_data['section_3_custom_class'], 
+						            'section4' 	=> $the_chameleon_data['section_4_custom_class'], 
+						            'section5' 	=> $the_chameleon_data['section_5_custom_class'],
+						            'section6' 	=> $the_chameleon_data['section_6_custom_class'], 
+						            'section7' 	=> $the_chameleon_data['section_7_custom_class'], 
+						        ),
+
+						    'the_chameleon_class' => array(
+							
+					           	 	'header' 	=> isset( $the_chameleon_data['header_class'] ) ? $the_chameleon_data['header_class'] : "",
+						            'top' 		=> isset( $the_chameleon_data['top_class'] )    ? $the_chameleon_data['top_class']    : "",
+						            'section1' 	=> $the_chameleon_data['section_1_class'],
+						            'section2' 	=> $the_chameleon_data['section_2_class'], 
+						            'section3' 	=> $the_chameleon_data['section_3_class'], 
+						            'section4' 	=> $the_chameleon_data['section_4_class'], 
+						            'section5' 	=> $the_chameleon_data['section_5_class'],
+						            'section6' 	=> $the_chameleon_data['section_6_class'], 
+						            'section7' 	=> $the_chameleon_data['section_7_class'], 
+						        )
+
+						);
+					
+					
+						/*print_R($new_data);*/
+		
+						update_post_meta($post_id, 'the_chameleon_page_builder_meta', $new_data );
+						
+						update_post_meta($post_id, 'the_chameleon_page_builder_transfer_data', 'yes');
+						
+					endif;	
+					
+
+				endif;
+				
+				
+			endif;
+			
+			
+		/*
+			echo "ASDsa";
+					$tMeta = get_post_meta($post_id, 'the_chameleon_meta', true);
+		
+					print_r($tMeta );
+		
+					$pMeta = get_post_meta($post_id, 'the_chameleon_page_builder_meta', true);
+		
+					print_r($pMeta );*/
+		
+		}
+		
 		
 		
 		/**
@@ -149,14 +330,17 @@ namespace TheChameleonPageBuilder;
 			
 			/*print_R(	$posts);*/
 			
-			foreach ($posts as $key => $value) {
+			if ( !empty( $posts ) ) :
+				
+			foreach ($posts as $key => $value) :
 				
  			   $sidebars = array(
  				   $value->ID.'-1' => "Section 1",
  			       $value->ID.'-2' => "Section 2",
+				   $value->ID.'-3' => "Section 3",
  			   );
-				# code...
-			}
+			   # code...
+			endforeach;
 		
 			   
 				foreach (  $sidebars as $key => $value ) :
@@ -165,7 +349,7 @@ namespace TheChameleonPageBuilder;
 								array(
 									'name'          => $value,
 									'id'			=> $key,
-									'description'   => $posts[0]->post_title,
+									'description'   => ' | http://google.com  ',
 									'class'			=> 'the_chameleon',
 									'before_widget' => '<section id="%1$s" class="widget  %2$s">', //hidden
 									'after_widget'  => '</section></section><!-- end widget-->',
@@ -174,7 +358,7 @@ namespace TheChameleonPageBuilder;
 								);
 					endif;
 				endforeach;
-				
+				endif;
 			/*endif;*/
 			
 		}
