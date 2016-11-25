@@ -5,99 +5,16 @@ get_header();
 //http://themehybrid.com/board/topics/customizer-current-preview-url
 global $TheChameleonPageBuilderMeta, $TheChameleonMeta; 
 
+/*print_R($TheChameleonPageBuilderMeta);*/
+
+
 $main_wrap  = 'fullwidth'; 
 
 $meta = get_post_meta(get_the_ID(), 'the_chameleon_page_builder_meta', true);
 
-
-
-
-
-/*print_R($meta );*/
-/*
-[bg_color] => Array
-        (
-            [header] => #81d742
-            [top] => 
-            [section1] => #dd3333
-            [section2] => 
-            [section3] => 
-            [section4] => 
-            [section5] => 
-            [section6] => 
-            [section7] => 
-        )
-
-    [bg_image] => Array
-        (
-            [header] => http://localhost/chameleon/wp-content/uploads/2016/11/design-1.jpg
-            [top] => 
-            [section1] => 
-            [section2] => 
-            [section3] => 
-            [section4] => 
-            [section5] => 
-            [section6] => 
-            [section7] => 
-        )
-
-    [bg_type] => Array
-        (
-            [header] => tile
-            [top] => tile
-            [section1] => tile
-            [section2] => tile
-            [section3] => tile
-            [section4] => tile
-            [section5] => tile
-            [section6] => tile
-            [section7] => tile
-        )
-
-    [color] => Array
-        (
-            [header] => #1e73be
-            [top] => 
-            [section1] => #1e73be
-            [section2] => 
-            [section3] => 
-            [section4] => 
-            [section5] => 
-            [section6] => 
-            [section7] => 
-        )
-
-    [color_link] => Array
-        (
-            [header] => #8224e3
-            [top] => 
-            [section1] => #8224e3
-            [section2] => 
-            [section3] => 
-            [section4] => 
-            [section5] => 
-            [section6] => 
-            [section7] => 
-        )
-
-    [border_color] => Array
-        (
-            [header] => #000000
-            [top] => 
-            [section1] => #dd9933
-            [section2] => 
-            [section3] => 
-            [section4] => 
-            [section5] => 
-            [section6] => 
-            [section7] => 
-        )*/
-
-
+/*print_R($meta);*/
 ?>
 
-
-	
 <!-- Start page -->
 <section id="page-<?php the_ID(); ?>" <?php post_class('the_chameleon_page_builder'); ?>>
 <?php if ( $main_wrap  == 'stretch' ) : ?>
@@ -135,7 +52,7 @@ $meta = get_post_meta(get_the_ID(), 'the_chameleon_page_builder_meta', true);
 			  
 			 echo  '<style type="text/css" media="screen">';
 			 
-				 echo '#page-builder-section'.$i.'{';
+				 	echo '#page-builder-section'.$i.'{';
 				 	echo !empty($bg_color) ? 'background-color:'.$bg_color.';': "";
 					echo !empty($bg_image) ? 'background-image: url('.$bg_image.');': "";
 					
@@ -241,7 +158,7 @@ $meta = get_post_meta(get_the_ID(), 'the_chameleon_page_builder_meta', true);
                    	<?php if (  $meta['wrap']['section'.$i]  == 'normal' ) : ?>
 						<div id="page-builder-section-<?php echo $i ?>-<?php the_ID(); ?>-container" class="container page-container page-container-<?php the_ID(); ?>">
 					<?php endif;?>  						                      
-						<section id="page-builder-section<?php echo $i ?>" class="col100 page-builder page-builder-section-<?php echo $i ?> <?php echo $meta['class']['section'.$i].' '.$meta['col']['section'.$i] ?>">
+						<section id="page-builder-section<?php echo $i ?>" class="col100 the_chameleon_page_builder_<?php echo $i ?>_section page-builder page-builder-section-<?php echo $i ?> <?php echo $meta['class']['section'.$i].' '.$meta['col']['section'.$i] ?>">
 							<?php if (  $meta['wrap']['section'.$i]   == 'stretch' ) : ?>
 								<div id="page-builder-section-<?php echo $i ?>-<?php the_ID(); ?>-container" class="container page-container page-container-<?php the_ID(); ?>">
 							<?php endif;?>  	

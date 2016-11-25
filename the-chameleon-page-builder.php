@@ -81,7 +81,7 @@ Author URI:
 	    __FILE__,
 	    'master'
 	);
-	$myUpdateChecker->setAccessToken('5a568aa699a8aec9bd380be2af6df85be8273c7c');
+	$myUpdateChecker->setAccessToken('4d27d090f094a8104b68ca97c87d37455c7d52ca');
 
 /*
 	global 	$wp_registered_sidebars, $wp_registered_widgets, $wp_registered_widget_controls, $wp_registered_widget_updates, $sidebars_widgets;

@@ -39,10 +39,7 @@
 			//get post meta values
 			add_action('init', array(&$this,'get_post_meta_values') );
 			add_action('wp', array(&$this,'get_post_meta_values') );
-				
-					
-		
-					
+
 		}
 	
 	
@@ -60,9 +57,18 @@
 			global $TheChameleonPageBuilderMeta;
 			
 			if ( is_singular() or is_single() or is_page() ) :										
-				$get_post_meta = get_post_meta( get_the_ID(), $this->slug.'meta', TRUE);						
+				$get_post_meta = get_post_meta( get_the_ID(), $this->slug.'meta', TRUE);	
+								
+								
+					$options = array(
+					
+						
+					);			
+									
 					foreach ( $this->parts as $key => $part ) :
+						
 						if ( !empty( $this->meta_boxes_fields[ $key ] ) ) :	
+							
 							foreach ( $this->meta_boxes_fields[ $key ] as $value ) :
 									foreach ( $value['fields'] as $field ) :									
 										$name 	 				   = $field['name'];										
@@ -72,7 +78,9 @@
 									endforeach;
 							endforeach;
 						endif;
-					endforeach;		
+					endforeach;	
+					
+						
 			endif;
 
 
@@ -159,7 +167,6 @@
 		 **/
 		 function meta_box_save( $post_id ){
 
-
 			// Check if our nonce is set.
 			if ( ! isset( $_POST['the-chameleon_custom_box_nonce'] ) )
 				return $post_id;
@@ -190,7 +197,6 @@
 			/* OK, its safe for us to save the data now. */
 			if ( !empty( $_POST['page_builder'] ) ) :
 
-
 				/*print_R( $_POST['page_builder'] );*/
 
  				$meta_values = $_POST['page_builder'];
@@ -199,16 +205,11 @@
 				update_post_meta( $post_id,	$this->slug.'meta', $meta_values );
 
 				//insert all meta
-				foreach ($_POST['page_builder'] as $key => $value) :				
+				foreach ($_POST['page_builder'] as $key => $value) :	
+					update_post_meta( $post_id, $this->slug.$key, $value );				
 					update_post_meta( $post_id, $key, $value );	
 				endforeach;
 	
-				
-				$location = admin_url().'customize.php?url= http://localhost/chameleon/page-bulder-test/';
-			/*	print_R($redirect_url);*/
-				wp_redirect($location);
-				
-			/*	apply_filters( 'redirect_post_location',  $location,  $post_id );*/
 	
 			endif;
 
@@ -466,35 +467,32 @@
 
 			$config = Config::getInstance(); ?>
 
-
-					<script type="text/javascript" charset="utf-8">
-
-						jQuery(document).ready(function() {	
-						
-							jQuery(".the_chameleon_page_builder_icon" ).click(function() {	
-						
-								var value = jQuery(this).attr('data-value');
-								var field = jQuery(this).attr('data-field-id');
-								var div   = jQuery(this).attr('data-div');
-							
-						
-								jQuery('.'+div+' .section_icon').removeClass('active');
-							
-								jQuery(this).addClass('active');
-							
-								jQuery('#'+field).val(value);
-							}); 
+				<script type="text/javascript" charset="utf-8">
+					jQuery(document).ready(function() {	
+						jQuery(".the_chameleon_page_builder_icon" ).click(function() {	
 					
-						});
-					
-
-					</script>	
+							var value = jQuery(this).attr('data-value');
+							var field = jQuery(this).attr('data-field-id');
+							var div   = jQuery(this).attr('data-div');
+						
+							jQuery('.'+div+' .section_icon').removeClass('active');
+							jQuery(this).addClass('active');
+							jQuery('#'+field).val(value);
+						}); 
+				
+					});
+				</script>	
 	
 
 		<?php
+			self::page_builder_options();
+				
+			$theme = wp_get_theme();
 		
-			self::page_builder_item('header', 'Header');
-			self::page_builder_item('top', 'Top');
+		    if ( $theme->get( 'Name' ) == "The Chameleon" ) :
+				self::page_builder_item('header', 'Header');
+				self::page_builder_item('top', 'Top');
+			endif; 
 			
 			self::page_builder_item('section1', 'Section 1');
 			self::page_builder_item('section2', 'Section 2');
@@ -503,7 +501,23 @@
 			self::page_builder_item('section5', 'Section 5');
 			self::page_builder_item('section6', 'Section 6');
 			self::page_builder_item('section7', 'Section 7');
-								
+			self::page_builder_item('section8', 'Section 8');
+			self::page_builder_item('section9', 'Section 9');
+			self::page_builder_item('section10', 'Section 10');
+			self::page_builder_item('section11', 'Section 11');
+			self::page_builder_item('section12', 'Section 12');
+			self::page_builder_item('section13', 'Section 13');
+			self::page_builder_item('section14', 'Section 14');
+			self::page_builder_item('section15', 'Section 15');
+			self::page_builder_item('section16', 'Section 16');
+			self::page_builder_item('section17', 'Section 17');
+			self::page_builder_item('section18', 'Section 18');
+			self::page_builder_item('section19', 'Section 19');
+			self::page_builder_item('section20', 'Section 20');	
+			
+		    if ( $theme->get( 'Name' ) =="The Chameleon" ) :
+				self::page_builder_item('bottom', 'Bottom');
+			endif; 				
 			
 		}
 		
@@ -519,6 +533,7 @@
 		
 		static function page_builder_item( $id, $title = 'Header', $swich = false ){ ?>
 			
+			
 			<?php
 			global  $post;
 			$config 	= Config::getInstance();
@@ -528,9 +543,14 @@
 			//get values
 			$meta 		= get_post_meta( $post->ID, $config->slug.'meta', true ); 
 			
+			//print_r($meta );
 			//define values
-			$meta['switch'][$id] 			 = !empty($meta['switch'][$id]) ? $meta['switch'][$id] : 'off';
-			$meta['wrap'][$id] 	 			 = !empty($meta['wrap'][$id])   ? $meta['wrap'][$id]   : 'normal';
+			
+			$meta['sidebars'][$id] 			 = !empty($meta['sidebars'][$id]) 		  ? $meta['sidebars'][$id] : $title;
+			
+			/*echo $meta['sidebars'][$id];*/
+			$meta['switch'][$id] 			 = !empty($meta['switch'][$id]) 		  ? $meta['switch'][$id] : 'off';
+			$meta['wrap'][$id] 	 			 = !empty($meta['wrap'][$id])   		  ? $meta['wrap'][$id]   : 'normal';
 			
 			$meta['padding_top'][$id] 	 	 = !empty($meta['padding_top'][$id])      ? $meta['padding_top'][$id]    : '';
 			$meta['padding_right'][$id] 	 = !empty($meta['padding_right'][$id])    ? $meta['padding_right'][$id]  : '';
@@ -567,13 +587,13 @@
 		
 			/*
 			echo "<pre>";
-									print_R($meta);
-									echo "</pre>";*/
+			print_R($meta);
+			echo "</pre>";*/
 			
 			
 			?>
 			<?php echo '<!-- START'.$title.'-->'  ?>
-			<tr id="the_chameleon_page_builder_section_<?php echo $id ?>" class="the_chameleon_page_builder_<?php echo $id ?>_section">
+			<tr id="the_chameleon_page_builder_<?php echo $id ?>_section" class="the_chameleon_page_builder_<?php echo $id ?>_section">
 				<td id="newmetaleft" class="left">
 
 					<div class="section_border">
@@ -583,7 +603,8 @@
 						<div class="left the_chameleon_page_builder_title the_chameleon_option_wrap" style="width:100%;">
 						
 							<!-- Title -->
-							<h2 ><span style="float:left;"><?php _e($title, "the-chameleon" ) ;?></strong></h2>
+							<?php echo Form::input("page_builder[sidebars][$id]", $meta['sidebars'][$id] , array('class'=>'sss', 'style'=>'width:230px;')); ?>
+							<h2><span style="float:left;"><?php _e($title, "the-chameleon" ) ;?></strong></h2>
 							
 							<!-- Activation -->
 						    <div class="onoffswitch" style="float:right;">
@@ -775,6 +796,37 @@
 			
 		}
 		
+		static function page_builder_options( $id='test', $title = 'Header', $swich = false ){ ?>
+		
+			<!-- OPTIONS -->
+			<tr id="the_chameleon_page_builder_section_header" class="the_chameleon_page_builder_header_section">
+				<td id="newmetaleft" class="left">
+					<!-- Activation -->
+				    <div class="onoffswitch" style="float:left;">
+				        <input type="checkbox" name="page_builder[switch][active_page_builder]" class="onoffswitch-checkbox" id="the_chameleon_active_page_builder" checked>
+				        <label class="onoffswitch-label" for="the_chameleon_active_page_builder">
+				            <span class="onoffswitch-inner"></span>
+				            <span class="onoffswitch-switch"></span>
+				        </label>
+					
+				    </div>
+				
+					<strong style="float:left; margin-left:10px; margin-top:5px;">Active Page Builder</strong>
+					
+				
+					
+					<select id="the_chameleon_number_of_sections" name="page_builder[switch][number_of_sections]" style="float:left; width:64px; margin-left:10px;">
+						<?php for ($i=1; $i <= 20; $i++) { 
+							
+							echo '<option value="'.$i.'">'.$i.'</option>';
+						 } ?>
+				
+					</select>
+					<strong style="float:left; margin-left:10px; margin-top:5px;">Number Of Sections</strong>
+				</td>
+			</tr>
+		
+		<?php }
 		
 		static function bekap(){ ?>
 			

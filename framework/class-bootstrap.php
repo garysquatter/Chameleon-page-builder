@@ -25,7 +25,7 @@ namespace TheChameleonPageBuilder;
 			/*$TermMeta = new Term_Meta( $parts );*/
 			
 			//add style and scripts
-			add_action( 'wp_enqueue_scripts', array(&$this, 'scripts_and_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( &$this, 'scripts_and_styles' ) );
 			
 			//admin scripts ans styles	
 			add_action( 'admin_enqueue_scripts', array(&$this, 'admin_scripts_and_styles' ) );	
@@ -298,7 +298,7 @@ namespace TheChameleonPageBuilder;
 		}
 		
 		/**
-		 * 	Register sidebars
+		 * 	Register sidebars from page meta
 		 *
 		 * @author Goran Petrovic
 		 * @since 1.0
@@ -311,100 +311,118 @@ namespace TheChameleonPageBuilder;
 			/*if(is_customize_preview()) :*/
 			$args = array(
 				'post_type'  => 'page',
-				/*
-				'meta_key'   => 'age',
-								'orderby'    => 'meta_value_num',
-								'order'      => 'ASC',*/
-				
+				'orderby' => 'ID',
+				'order'   => 'ASC',
 				'meta_query' => array(
 					array(
 						'key'     => 'the_chameleon_page_builder_meta',
-						/*
-						'value'   => array( 3, 4 ),
-												'compare' => 'IN',*/
-						
 					),
 				),
 			);
 			$posts = get_posts( $args );
 			
-			/*print_R(	$posts);*/
+		/*	print_R( $posts );*/
 			
 			if ( !empty( $posts ) ) :
 				
-			foreach ($posts as $key => $value) :
+			foreach ( $posts as $key => $post ) :
 				
- 			   $sidebars = array(
- 				   $value->ID.'-1' => "Section 1",
- 			       $value->ID.'-2' => "Section 2",
-				   $value->ID.'-3' => "Section 3",
- 			   );
+				$meta = get_post_meta( $post->ID, $this->config->slug.'meta' ,true );
+				
+				//echo $post->ID;
+				//print_R($meta);
+				
+				//header
+				$meta['switch']['header'] = isset($meta['switch']['header']) ? $meta['switch']['header'] : 'off';
+
+				if($meta['switch']['header']=="on") :
+				 	$sidebars[] = array('id'=>$post->ID.'-header', 'name'=>'Page Header ', 'desc'=>$post->post_title. ' (ID: '.$post->ID.')');	
+				endif;
+				
+				//top
+				$meta['switch']['top'] = isset($meta['switch']['top']) ? $meta['switch']['top'] : 'off';
+				
+				if($meta['switch']['top']=="on") :
+				 	$sidebars[] = array('id'=>$post->ID.'-top', 'name'=>'Page Top ', 'desc'=>$post->post_title. ' (ID: '.$post->ID.')');	
+				endif;
+
+				//sections
+				for ($i=1; $i < 20; $i++) :
+					
+					$meta['switch']['section'.$i] = isset($meta['switch']['section'.$i]) ? $meta['switch']['section'.$i] : 'off';
+
+					if($meta['switch']['section'.$i]=="on") :
+							
+						 //col
+						 $col = $this->config->columns[$meta['col']['section'.$i]];
+						 $name = isset($meta['sidebars']['section'.$i]) ? $meta['sidebars']['section'.$i] : 'Section '.$i ;
+							
+						 $sidebars[] = array('id'=>$post->ID.'-'.$i, 'name'=>$name , 'desc'=>'Section '.$i.' in '.$col.' for: '.$post->post_title. ' Page (ID: '.$post->ID.')');
+					 endif;
+					 
+				endfor;
+				 
+				//bottom
+				$meta['switch']['bottom'] = isset($meta['switch']['bottom']) ? $meta['switch']['bottom'] : 'off';
+				
+				if($meta['switch']['bottom']=="on") :
+				 	$sidebars[] = array('id'=>$post->ID.'-bottom', 'name'=>'Page Bottom ', 'desc'=>$post->post_title. ' (ID: '.$post->ID.')');	
+				endif;
+ 			      
+ 	
+			   
 			   # code...
 			endforeach;
-		
-			   
-				foreach (  $sidebars as $key => $value ) :
-					if ( !empty( $key ) ) :
+			
+			//print_R( $sidebars );
+
+				foreach (  $sidebars as $key => $sidebar ) :
+					if ( !empty( $sidebar['id'] ) ) :
 						register_sidebar(
 								array(
-									'name'          => $value,
-									'id'			=> $key,
-									'description'   => ' | http://google.com  ',
+									'name'          => $sidebar['name'],
+									'id'			=> $sidebar['id'],
+									'description'   => $sidebar['desc'],
 									'class'			=> 'the_chameleon',
-									'before_widget' => '<section id="%1$s" class="widget  %2$s">', //hidden
+									'before_widget' => '<section id="%1$s" class="widget hidden  %2$s">', //hidden
 									'after_widget'  => '</section></section><!-- end widget-->',
 									'before_title'  => '<header class="widget-header"><h4>',
 									'after_title'   => '</h4></header><section class="widget-content">' )
 								);
 					endif;
 				endforeach;
-				endif;
-			/*endif;*/
+				
+			endif;
+			
 			
 		}
 		
 		
 		
-		
+		//if is active page builder
 		function wpa3396_page_template( $page_template ){
-		    if ( is_singular('page') ) {
-					$config = Config::getInstance(); 
+		    if ( is_singular('page') ) :
+				$config = Config::getInstance(); 
 		        $page_template = $config->DIR.'parts/Page_Builder/view/page-builder.php';
-		    }
+			endif;
 		    return $page_template;
 		}
 
 		 function filter_content( $content ) { 
-		    if ( is_singular('page')) {
-		      
-				$config = Config::getInstance(); 
-				
+		    if ( is_singular('page')) :     
+				$config = Config::getInstance(); 		
 				ob_start();
-					/* PERFORM COMLEX QUERY, ECHO RESULTS, ETC. */
 				include_once($config->DIR.'parts/Page_Builder/view/page-builder.php');
-				
 				$content = ob_get_contents();
 			    ob_end_clean();
-				
-				
-				
-		   
-				
-		
-			}
-
+			endif;
 		    return $content;
 		}
-
-
 
 		//remove_the_chameleon_page_builder
 		function remove_the_chameleon_page_builder() {
 			remove_meta_box( 'page_builder_main' , 'page' , 'normal' ); 
 		}
-		
-
-
 
 		/**
 		 * 	Register sidebars
@@ -452,9 +470,36 @@ namespace TheChameleonPageBuilder;
 	    function scripts_and_styles(){
   
 
-	    	if ( !is_admin() ) :	
+				//page builder effects load just on pages
+				if (is_page()) :
+					
+					global $post; 
+					
+					$TheChameleonMeta = get_post_meta($post->ID, $this->config->slug.'meta', true);
+	
+					//page builder
+					for ($i=1; $i <= 20 ; $i++) :
+						# code...	
+	   	    			$page_builder['section_'.$i.'_animate']	= !empty( $TheChameleonMeta['animate']['section'.$i] ) 			? $TheChameleonMeta['animate']['section'.$i] 				: 'fadeIn';
+	   	    			$page_builder['section_'.$i.'_duration']= !empty( $TheChameleonMeta['animate_duration']['section'.$i] ) 	? $TheChameleonMeta['animate_duration']['section'.$i] 	: 'animated07';
+	   	    			$page_builder['section_'.$i.'_delay']	= !empty( $TheChameleonMeta['animate_delay']['section'.$i]  ) 	? $TheChameleonMeta['animate_delay']['section'.$i] 			: 'delay03';
 
-			endif;
+					endfor;
+	
+					//deregister the chameleon theme page builder	
+					wp_deregister_script( 'the-chameleon-page-builder' );
+								
+	   	    		//page builder			
+	   	    		wp_enqueue_script( 'the-chameleon-page-builder', $this->config->URL .'/js/page-builder.js', array( 'jquery' ), '1.0.0'  );
+							
+					//page builder localize functions
+	   	    		wp_localize_script( 'the-chameleon-page-builder', 'page_builder_data', $page_builder );
+      
+				endif;
+				
+			
+				
+		
 		
 	    }
 		
@@ -499,6 +544,10 @@ namespace TheChameleonPageBuilder;
 				
 		 	$config = Config::getInstance();
 			wp_enqueue_style( 'the-chameleon-page-builder-admin', $config->URL .'css/style.css' );
+			
+			wp_enqueue_script( 'the-chameleon-page-builder', $config->URL  .'/js/admin.js', array( 'jquery' ), '1.0.0'  );
+			
+		
 		}
 	
 	
